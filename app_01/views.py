@@ -1,0 +1,30 @@
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.db.models import Count
+from app_01.models import WineQuality
+
+
+# Create your views here.
+def sample_text(request):
+    return HttpResponse('Hello World!')
+
+def sample_html(request):
+    return render(request, 'hello.html', {'name':'Keanu'})
+
+
+def bar_chart(request):
+    # Query the data from the PostgreSQL database
+    records = WineQuality.objects.all()
+
+    # Get the number of wines from each country.
+    wine_counts = records.values('wine_color').annotate(count=Count('wine_color'))
+
+    # Create the bar chart data.
+    bar_chart_data = [{
+        'x': wine_count['wine_color'],
+        'y': wine_count['count'],
+    } for wine_count in wine_counts]
+
+    return render(request, 'bar_chart.html', {
+        'bar_chart_data': bar_chart_data,
+    })

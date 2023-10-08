@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Wine Color Bar Chart</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div style="width: 80%; margin: 0 auto">
+      <canvas id="wineColorChart"></canvas>
+    </div>
+
+    <script>
+      var ctx = document.getElementById('wineColorChart').getContext('2d');
+      var data = {
+          labels: [{% for data in bar_chart_data %}"{{ data.x }}",{% endfor %}],
+          datasets: [{
+              label: 'Number of Wines',
+              data: [{% for data in bar_chart_data %}{{ data.y }},{% endfor %}],
+              backgroundColor: 'rgba(75, 192, 192, 0.2)',
+              borderColor: 'rgba(75, 192, 192, 1)',
+              borderWidth: 1
+          }]
+      };
+
+      var options = {
+          scales: {
+              y: {
+                  beginAtZero: true
+              }
+          }
+      };
+
+      var myBarChart = new Chart(ctx, {
+          type: 'bar',
+          data: data,
+          options: options
+      });
+    </script>
+  </body>
+</html>
